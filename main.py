@@ -2,7 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -11,15 +11,19 @@ load_dotenv()
 
 app = FastAPI()
 
+# Allow CORS so the frontend HTML can communicate with this backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class ContactForm(BaseModel):
     name: str
     email: str
     message: str
-
-@app.get("/")
-async def serve_portfolio():
-    # Serve the HTML file when someone visits the homepage
-    return FileResponse("ananya_portfolio.html")
 
 @app.post("/api/send")
 async def send_email(form: ContactForm):
@@ -59,3 +63,10 @@ async def send_email(form: ContactForm):
     except Exception as e:
         print(f"Error sending email: {e}")
         raise HTTPException(status_code=500, detail="Failed to send email")
+from fastapi.responses import FileResponse
+
+# tells the backend to display your HTML file
+@app.get("/")
+async def serve_portfolio():
+    # It assumes the HTML file is sitting right next to the Python file
+    return FileResponse("ananya_portfolio.html")

@@ -797,6 +797,12 @@ body.dark-mode {
           </div>
         </div>
         <div class="side-card">
+          <div class="side-card-title">// EXPERIENCE</div>
+          <div style="font-size: 17px;font-weight:300;color:var(--text2);line-height:1.75;">
+            <strong>Research Intern at MNIT Jaipur</strong> under Dr. E.S. Pilli, working on Tor network analysis — studying anonymity protocols and network traffic patterns.
+          </div>
+        </div>
+        <div class="side-card">
           <div class="side-card-title">// EDUCATION</div>
           <div class="edu-item">
             <div class="edu-school">SKIT, Jaipur</div>
@@ -1116,9 +1122,9 @@ async function submitContactForm() {
   btn.disabled = true;
 
   try {
-    const response = await fetch('/api/send', {
+    const response = await fetch('https://formspree.io/f/mzdwppbb', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ name, email, message })
     });
 
@@ -1138,7 +1144,6 @@ async function submitContactForm() {
     }
   } catch (error) {
     console.error(error);
-    alert('Oops! The backend server might not be running. Error: ' + error.message);
     btn.textContent = 'Try Again';
     btn.disabled = false;
   }
